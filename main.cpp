@@ -2,12 +2,10 @@
 #include <vector>
 #include <algorithm>
 #include "Vehicle.hpp"
+#include <locale.h> 
 
 using namespace std;
 
-using namespace std;
-
-// Função para encontrar um veículo pela placa
 Vehicle* FindVehicle(vector<Vehicle>& vehicles, string plate) {
     for (auto& vehicle : vehicles) {
         if (vehicle.GetPlate() == plate) {
@@ -17,7 +15,6 @@ Vehicle* FindVehicle(vector<Vehicle>& vehicles, string plate) {
     return nullptr;
 }
 
-// Função para listar todos veículos
 void ListVehicles(vector<Vehicle>& vehicles) {
     cout << "\n== Veículos Cadastrados ==" << endl;
     for (size_t i = 0; i < vehicles.size(); i++) {
@@ -25,13 +22,15 @@ void ListVehicles(vector<Vehicle>& vehicles) {
     }
 }
 
-// Menu principal
 int main() {
+
+    setlocale(LC_ALL, "pt_BR.UTF-8");
     vector<Vehicle> vehicles;
     int option;
 
     do {
-        cout << "\n--- Sistema de Gerenciamento de Frota ---\n";
+        cout << "\n=====  Trabalho I- Programação II UFSC =====\n";
+        cout << "ESCOLHA UMA DAS OPÇÕES ABAIXO: \n";
         cout << "1. Cadastrar Veículo\n";
         cout << "2. Remover Veículo\n";
         cout << "3. Adicionar uma Rota a um Veículo\n";
@@ -42,24 +41,24 @@ int main() {
         cout << "0. Sair\n";
         cout << "Selecione uma opção: ";
         cin >> option;
-        cin.ignore(); // Limpa o buffer do teclado
+        cin.ignore();
 
         switch (option) {
             case 1: {
                 string plate, model, brand;
-                cout << "Digite a placa: ";
+                cout << "Informe a placa: ";
                 getline(cin, plate);
-                cout << "Digite o modelo: ";
+                cout << "Informe o modelo: ";
                 getline(cin, model);
-                cout << "Digite a marca: ";
+                cout << "Informe a marca: ";
                 getline(cin, brand);
-                vehicles.push_back(Vehicle(plate, model, brand));
+                vehicles.push_back(Vehicle(plate, model, brand, 0.0f));
                 cout << "Veículo cadastrado com sucesso!" << endl;
                 break;
             }
             case 2: {
                 string plate;
-                cout << "Digite a placa do veículo para remover: ";
+                cout << "Informe a placa do veículo que deseja remover: ";
                 getline(cin, plate);
                 auto it = remove_if(vehicles.begin(), vehicles.end(),
                     [plate](Vehicle& v) { return v.GetPlate() == plate; });
@@ -74,15 +73,15 @@ int main() {
             case 3: {
                 string plate, origin, destination;
                 float distance;
-                cout << "Digite a placa do veículo: ";
+                cout << "Informe a placa do veículo: ";
                 getline(cin, plate);
                 Vehicle* vehicle = FindVehicle(vehicles, plate);
                 if (vehicle) {
-                    cout << "Digite a cidade de origem: ";
+                    cout << "Informe a cidade de origem: ";
                     getline(cin, origin);
-                    cout << "Digite a cidade de destino: ";
+                    cout << "Informe a cidade de destino: ";
                     getline(cin, destination);
-                    cout << "Digite a distância em km: ";
+                    cout << "Informe a distância em km: ";
                     cin >> distance;
                     cin.ignore();
                     vehicle->IncludeTrip(origin, destination, distance);
@@ -95,13 +94,13 @@ int main() {
             case 4: {
                 string plate;
                 size_t index;
-                cout << "Digite a placa do veículo: ";
+                cout << "Informe a placa do veículo: ";
                 getline(cin, plate);
                 Vehicle* vehicle = FindVehicle(vehicles, plate);
                 if (vehicle) {
                     cout << "Rotas disponíveis:\n";
                     cout << vehicle->GetAllTrips();
-                    cout << "Digite o índice da rota para remover: ";
+                    cout << "Informe o índice da rota para remover: ";
                     cin >> index;
                     cin.ignore();
                     if (vehicle->RemoveTrip(index)) {
@@ -116,7 +115,7 @@ int main() {
             }
             case 5: {
                 string plate;
-                cout << "Digite a placa do veículo: ";
+                cout << "Informe a placa do veículo: ";
                 getline(cin, plate);
                 Vehicle* vehicle = FindVehicle(vehicles, plate);
                 if (vehicle) {
@@ -137,7 +136,7 @@ int main() {
             }
             case 7: {
                 string word;
-                cout << "Digite uma palavra para buscar: ";
+                cout << "Informe uma palavra para buscar: ";
                 getline(cin, word);
                 bool found = false;
                 for (auto& vehicle : vehicles) {
@@ -154,7 +153,7 @@ int main() {
                 break;
             }
             case 0:
-                cout << "Saindo... Obrigado por usar o sistema!" << endl;
+                cout << "Muito Obrigado, até breve!" << endl;
                 break;
             default:
                 cout << "Opção inválida. Tente novamente!" << endl;

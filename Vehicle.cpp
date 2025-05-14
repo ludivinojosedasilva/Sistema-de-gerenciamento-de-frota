@@ -1,16 +1,12 @@
 #include "Vehicle.hpp"
 #include <sstream>
 
-Vehicle::Vehicle(string plate, string model, string brand) {
-    m_plate = plate;
-    m_model = model;
-    m_brand = brand;
-    m_initialKm = 0;
-}
+Vehicle::Vehicle(string plate, string model, string brand, float initialKM)
+    : m_plate(plate), m_model(model), m_brand(brand), m_initialKm(0) {}
 
 void Vehicle::IncludeTrip(string origin, string destination, float distance) {
     Route newRoute(origin, destination, distance);
-    m_trips.push_back(newRoute);
+    m_trips.push_back(new Route(newRoute));
 }
 
 bool Vehicle::RemoveTrip(size_t index) {
@@ -24,11 +20,11 @@ bool Vehicle::RemoveTrip(size_t index) {
 string Vehicle::SearchTripBySubstring(string wordToSearch) {
     stringstream result;
     for (size_t i = 0; i < m_trips.size(); i++) {
-        if (m_trips[i].GetOrigin().find(wordToSearch) != string::npos ||
-            m_trips[i].GetDestination().find(wordToSearch) != string::npos) {
-            result << "Trip " << i << ": " << m_trips[i].GetOrigin()
-                   << " -> " << m_trips[i].GetDestination()
-                   << " (" << m_trips[i].GetDistanceKM() << " km)" << endl;
+        if (m_trips[i]->GetOrigin().find(wordToSearch) != string::npos ||
+            m_trips[i]->GetDestination().find(wordToSearch) != string::npos) {
+            result << "Trip " << i << ": " << m_trips[i]->GetOrigin()
+                   << " -> " << m_trips[i]->GetDestination()
+                   << " (" << m_trips[i]->GetDistanceKM() << " km)" << endl;
         }
     }
     return result.str();
@@ -37,9 +33,9 @@ string Vehicle::SearchTripBySubstring(string wordToSearch) {
 string Vehicle::GetAllTrips() {
     stringstream result;
     for (size_t i = 0; i < m_trips.size(); i++) {
-        result << "Trip " << i << ": " << m_trips[i].GetOrigin()
-               << " -> " << m_trips[i].GetDestination()
-               << " (" << m_trips[i].GetDistanceKM() << " km)" << endl;
+        result << "Trip " << i << ": " << m_trips[i]->GetOrigin()
+               << " -> " << m_trips[i]->GetDestination()
+               << " (" << m_trips[i]->GetDistanceKM() << " km)" << endl;
     }
     return result.str();
 }
@@ -47,7 +43,7 @@ string Vehicle::GetAllTrips() {
 float Vehicle::GetConsumption() {
     float totalKm = m_initialKm;
     for (auto &trip : m_trips) {
-        totalKm += trip.GetDistanceKM();
+        totalKm += trip->GetDistanceKM();
     }
     return totalKm;
 }
@@ -59,7 +55,7 @@ string Vehicle::GetPlate() {
 float Vehicle::GetTotalKm() {
     float total = m_initialKm;
     for (auto &trip : m_trips) {
-        total += trip.GetDistanceKM();
+        total += trip->GetDistanceKM();
     }
     return total;
 }

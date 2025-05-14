@@ -11,10 +11,10 @@ class Vehicle
 private:
     string m_plate, m_model, m_brand;
     float m_initialKm;
-    vector<Route> m_trips;
+    vector<Route*> m_trips;
 
 public:
-    Vehicle(string plate, string model, string brand);
+    Vehicle(string plate, string model, string brand, float initialKM);
 
     void IncludeTrip(string origin, string destination, float distance);
     bool RemoveTrip(size_t index);
@@ -23,8 +23,8 @@ public:
     string GetAllTrips();
     float GetConsumption();
     
-    string GetPlate(); // Método auxiliar para buscar veículos
-    float GetTotalKm(); // Método auxiliar para calcular KM total
+    string GetPlate();
+    float GetTotalKm();
 };
 
 #endif // VEHICLE_HPP
